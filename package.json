@@ -1,0 +1,19 @@
+{
+  "name": "cook-book-study",
+  "version": "1.0.0",
+  "description": "a training about programming styles",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShareefAlawneh/cook-book-study.git"
+  },
+  "author": "Shareef Alawneh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ShareefAlawneh/cook-book-study/issues"
+  },
+  "homepage": "https://github.com/ShareefAlawneh/cook-book-study#readme"
+}
