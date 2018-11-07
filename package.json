@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/ShareefAlawneh/cook-book-study/issues"
   },
-  "homepage": "https://github.com/ShareefAlawneh/cook-book-study#readme"
+  "homepage": "https://github.com/ShareefAlawneh/cook-book-study#readme",
+  "dependencies": {
+    "@types/node": "^10.12.2"
+  }
 }
