@@ -1,9 +1,6 @@
 "use strict";
-// import { ChapterOne } from './chapters/ChapterOne';
-// let chapterOne = new ChapterOne();
-// chapterOne.run();
-for (var _i = 0, _a = Array.from(Array(25).keys()); _i < _a.length; _i++) {
-    var i = _a[_i];
-    console.log(i);
-}
+Object.defineProperty(exports, "__esModule", { value: true });
+var ChapterOne_1 = require("./chapters/ChapterOne");
+var chapterOne = new ChapterOne_1.ChapterOne("file Path goes here ...");
+chapterOne.run();
 //# sourceMappingURL=index.js.map
