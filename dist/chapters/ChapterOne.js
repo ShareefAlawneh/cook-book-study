@@ -12,24 +12,22 @@ var path = __importStar(require("path"));
 var readline = __importStar(require("readline"));
 var ChapterOne = /** @class */ (function () {
     function ChapterOne(filePath) {
-        this.touchOpen = function (filename, writeTo) {
-            if (writeTo === void 0) { writeTo = filename; }
-            var filePath = path.join(__dirname, "../util/" + filename);
-            var writeToPath = path.join(__dirname, "../util/" + writeTo);
+        this.touchOpen = function (filename) {
+            var filePath = path.join(__dirname, "../utils/" + filename);
             // create a file if not exists
             if (!fs.existsSync(filePath)) {
                 var fd = fs.openSync(filePath, fs.constants.O_CREAT);
                 fs.closeSync(fd);
             }
+            // return fs.openSync(filePath, fs.constants.R_OK);
             // return file reader
             return readline.createInterface({
                 input: fs.createReadStream(filePath),
-                output: fs.createWriteStream(writeToPath),
                 terminal: false
             });
         };
         this.readFileContents = function () { return fs.readFileSync(path.join(__dirname, '../utils/stop_words.txt'), 'utf-8'); };
-        this.isalnum = function (str) { return str.match(/^[a-z0-9]+$/i); };
+        this.isalnum = function (str) { return str.match(/[a-z0-9]/i); };
         this.range = function (num) { return Array.from(Array(num).keys()); };
         this.inputFile = filePath;
     }
@@ -47,47 +45,77 @@ var ChapterOne = /** @class */ (function () {
         data.push(''); // a word holder #data[6]
         data.push(0); // freq of word #data[7]
         data.push(0); // a loop tracker #data[8]
-        var word_freqs = this.touchOpen("word_freqs.txt", "r+");
+        data.push(false); // indecator for only once #data[9]
+        var word_freqs = this.touchOpen("word_freqs.txt");
+        var freader = this.touchOpen(this.inputFile);
         // loop through the file line by line
-        var file = this.touchOpen(this.inputFile, "r");
-        file.on('line', function (line) {
+        freader.on('line', function (line) {
+            if (line == undefined)
+                freader.close();
             if (line[line.length - 1] != '\n')
                 line += '\n';
             data[1] = [line];
             data[2] = null;
             data[3] = 0;
-            for (var _i = 0, _a = line.split(""); _i < _a.length; _i++) {
+            for (var _i = 0, _a = data[1][0]; _i < _a.length; _i++) {
                 data[8] = _a[_i];
                 if (data[2] == null) {
-                    if (_this.isalnum(data[8]))
+                    if (_this.isalnum(data[8]) != null) {
                         data[2] = data[3];
+                        data[3] += 1;
+                    }
                 }
                 else {
-                    if (!_this.isalnum(data[8])) {
+                    if (_this.isalnum(data[8]) == null) {
                         data[4] = false;
-                        data[5] = data[1][0] + "".substring(data[2], data[3]).toLowerCase();
-                        if (data[5].length >= 2 && !data[0].includes(data[5])) {
+                        data[5] = data[1][0].substring(data[2], data[3] + 1);
+                        if (data[5].length >= 2 && !data[0].includes(data[5].trim())) {
+                            console.log(data[5]);
+                            if (!data[9]) {
+                                data[9] = true;
+                                _this.detemineCount(data);
+                                // word_freqs.emit('line')
+                            }
+                            // this.readWordfreqs(word_freqs, data)
                             word_freqs.on('line', function (line) {
-                                data[6] = line.trim();
-                                data[7] = parseInt(data[6].split(",")[1]);
-                                if (data[5] == data[6]) {
-                                    data[7] += 1;
-                                    data[4] = true;
-                                    return;
+                                console.log("reading");
+                                console.log("line", line);
+                                if (line != undefined) {
+                                    data[6] = line.trim();
+                                    data[7] = parseInt(data[6].split(",")[1]);
+                                    data[6] = data[6].split(",")[0].trim();
+                                    if (data[5].trim() == data[6].trim()) {
+                                        data[7] += 1;
+                                        data[4] = true;
+                                        _this.detemineCount(data);
+                                        word_freqs.close();
+                                    }
+                                }
+                                else {
+                                    _this.detemineCount(data);
                                 }
                             });
-                            if (!data[4])
-                                word_freqs.write(data[5] + ", 1\n");
-                            else
-                                word_freqs.write(data[5] + ", " + data[7] + "\n");
                         }
                         data[2] = null;
                     }
                     data[3] += 1;
                 }
             }
+        }).on('close', function () {
+            _this.doPartTwo(data, word_freqs);
         });
-        file.close();
+    };
+    ChapterOne.prototype.detemineCount = function (data) {
+        if (!data[4]) {
+            fs.writeSync(fs.openSync(path.join(__dirname, "../utils/word_freqs.txt"), 'a'), data[5].trim() + ", 1\n");
+        }
+        else {
+            fs.writeSync(fs.openSync(path.join(__dirname, "../utils/word_freqs.txt"), 'a'), data[5].trim() + ", " + data[7] + "\n");
+        }
+    };
+    ChapterOne.prototype.doPartTwo = function (data, word_freqs) {
+        var _this = this;
+        console.log("part one done");
         // mark the array for garbage collection || flush its contents 
         data.length = 0;
         // ------------------- Part 2 -----------------
@@ -97,24 +125,29 @@ var ChapterOne = /** @class */ (function () {
         data.push(0); // #data[26]
         data.push(0); // loop tracker #data[27]
         word_freqs.on('line', function (line) {
-            data[25] = line.trim();
-            data[26] = parseInt(data[25].split(',')[1]);
-            data[25] = data[25].split(',')[0].trim();
-            for (data[27] in _this.range(25)) {
-                if (data[data[27]] == [] || data[data[27]][1] < data[26]) {
-                    data.splice(data[27], 0, [data[25], data[26]]);
-                    delete data[26];
-                    break;
+            if (line != undefined) {
+                data[25] = line.trim();
+                data[26] = parseInt(data[25].split(',')[1]);
+                data[25] = data[25].split(',')[0].trim();
+                for (data[27] in _this.range(25)) {
+                    if (data[data[27]] == [] || data[data[27]][1] < data[26]) {
+                        data.splice(data[27], 0, [data[25], data[26]]);
+                        delete data[26];
+                        break;
+                    }
                 }
             }
+        }).on('close', function () {
+            _this.printWords(data);
         });
-        data[27] = '';
-        for (var _i = 0, _a = data.splice(0, 25); _i < _a.length; _i++) {
+    };
+    ChapterOne.prototype.printWords = function (data) {
+        data[27] = "";
+        for (var _i = 0, _a = data.splice(0, 25).slice(); _i < _a.length; _i++) {
             data[27] = _a[_i];
             if (data[27].length == 2)
                 console.log(data[27][0] + " - " + data[27][1]);
         }
-        word_freqs.close();
     };
     return ChapterOne;
 }());
