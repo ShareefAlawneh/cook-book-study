@@ -60,18 +60,14 @@ export class ChapterOne {
         data.push(''); // a word holder #data[6]
         data.push(0); // freq of word #data[7]
         data.push(0); // a loop tracker #data[8]
+        data.push(0) // bytes indecator #data[9]
 
-        let freader = this.touchOpen(this.inputFile);
+        let buffer = new Buffer(46 * 2); // a buffer will hold 3 lines each one has at most 88 chars + 1 \n = 89, in the file i used a lines with 45 chars (bytes)
 
         // loop through the file line by line
-        freader.on('line', (line: string) => {
-            if (line == undefined)
-                freader.close();
+        while (data[9] = fs.readSync(fs.openSync(path.join(__dirname, "../utils/fileToRead.txt"), 'r'), buffer, 0, buffer.length, data[9])) {
 
-            if (line[line.length - 1] != '\n')
-                line += ' ';
-
-            data[1] = [line];
+            data[1] = [buffer.toString('utf-8')];
             data[2] = null;
             data[3] = 0;
 
@@ -140,13 +136,8 @@ export class ChapterOne {
 
 
             }
-
-
-
-        }).on('close', () => {
-            this.doPartTwo(data);
-        });
-
+        }
+        this.doPartTwo(data);
     }
 
 

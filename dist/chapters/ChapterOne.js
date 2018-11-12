@@ -43,18 +43,6 @@ var ChapterOne = /** @class */ (function () {
             // return file reader
             return readline.createInterface(fs.createReadStream(filePath));
         };
-        this.replace = function (fileName, val1, val2) {
-            console.log("replacing", val1 + " = " + val2);
-            var fileContent = fs.readFileSync(path.join(__dirname, "../utils/" + fileName), 'utf-8').split("\n");
-            fileContent.forEach(function (item, index) {
-                if (item.split(",")[0] == val1) {
-                    fileContent[index] = val1 + ", " + val2;
-                }
-            });
-            fileContent.forEach(function (item) {
-                fs.writeSync(fs.openSync(path.join(__dirname, "../utils/word_freqs.txt"), 'a'), item + "\n");
-            });
-        };
         this.getLine = function (filePath) {
             var fileContent, _i, fileContent_1, line;
             return __generator(this, function (_a) {
@@ -88,7 +76,6 @@ var ChapterOne = /** @class */ (function () {
     // and the global variable, came from program argv[],
     // so the real program starts from run() method.
     ChapterOne.prototype.run = function () {
-        var _this = this;
         var data = [this.readFileContents("stop_words.txt").split(',')]; // stop words file content (maximum 522 chars) #data[0]
         data.push([]); // line #data[1]
         data.push(null); // index of start char of the word #data[2]
@@ -98,30 +85,27 @@ var ChapterOne = /** @class */ (function () {
         data.push(''); // a word holder #data[6]
         data.push(0); // freq of word #data[7]
         data.push(0); // a loop tracker #data[8]
-        var freader = this.touchOpen(this.inputFile);
+        data.push(0); // bytes indecator #data[9]
+        var buffer = new Buffer(46 * 2); // a buffer will hold 3 lines each one has at most 88 chars + 1 \n = 89, in the file i used a lines with 45 chars (bytes)
         // loop through the file line by line
-        freader.on('line', function (line) {
-            if (line == undefined)
-                freader.close();
-            if (line[line.length - 1] != '\n')
-                line += ' ';
-            data[1] = [line];
+        while (data[9] = fs.readSync(fs.openSync(path.join(__dirname, "../utils/fileToRead.txt"), 'r'), buffer, 0, buffer.length, data[9])) {
+            data[1] = [buffer.toString('utf-8')];
             data[2] = null;
             data[3] = 0;
             for (var _i = 0, _a = data[1][0]; _i < _a.length; _i++) {
                 data[8] = _a[_i];
                 if (data[2] == null) {
-                    if (_this.isalnum(data[8]) != null) {
+                    if (this.isalnum(data[8]) != null) {
                         data[2] = data[3];
                         data[3] += 1;
                     }
                 }
                 else {
-                    if (_this.isalnum(data[8]) == null) {
+                    if (this.isalnum(data[8]) == null) {
                         data[4] = false;
                         data[5] = data[1][0].substring(data[2], data[3] + 1);
                         if (data[5].length >= 2 && !data[0].includes(data[5].trim())) {
-                            var wordFreqs = _this.getLine("word_freqs.txt");
+                            var wordFreqs = this.getLine("word_freqs.txt");
                             while (true) {
                                 var next = wordFreqs.next();
                                 if (next.done || next.value == undefined) {
@@ -151,9 +135,8 @@ var ChapterOne = /** @class */ (function () {
                     data[3] += 1;
                 }
             }
-        }).on('close', function () {
-            _this.doPartTwo(data);
-        });
+        }
+        this.doPartTwo(data);
     };
     ChapterOne.prototype.doPartTwo = function (data) {
         var _this = this;
