@@ -2,8 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as readline from 'readline';
 import * as replace from 'replace-in-file';
-
-
+import { performance } from 'perf_hooks';
 
 export class ChapterOne {
     inputFile: string;
@@ -62,12 +61,19 @@ export class ChapterOne {
         data.push(0); // a loop tracker #data[8]
         data.push(0) // bytes indecator #data[9]
 
+
         let buffer = new Buffer(46 * 2); // a buffer will hold 3 lines each one has at most 88 chars + 1 \n = 89, in the file i used a lines with 45 chars (bytes)
-
+        data[9] = fs.readSync(fs.openSync(path.join(__dirname, "../utils/fileToRead.txt"), 'r'), buffer, 0, buffer.length, data[9]);
+        let p0 = performance.now();
         // loop through the file line by line
-        while (data[9] = fs.readSync(fs.openSync(path.join(__dirname, "../utils/fileToRead.txt"), 'r'), buffer, 0, buffer.length, data[9])) {
+        while (data[9]) {
+            if (fs.readSync(fs.openSync(path.join(__dirname, "../utils/fileToRead.txt"), 'r'), buffer, 0, buffer.length, data[9]))
+                data[9] += fs.readSync(fs.openSync(path.join(__dirname, "../utils/fileToRead.txt"), 'r'), buffer, 0, buffer.length, data[9]);
+            else data[9] = 0;
 
-            data[1] = [buffer.toString('utf-8')];
+
+            data[1] = [buffer.toString('utf-8').replace(new RegExp('\r\n', 'g'), ' ').replace(new RegExp('\u0000', 'g'), ' ')];
+
             data[2] = null;
             data[3] = 0;
 
@@ -106,6 +112,7 @@ export class ChapterOne {
                                 data[6] = data[6].split(",")[0].trim();
 
 
+
                                 if (data[5].trim() == data[6].trim()) {
 
                                     data[7] += 1;
@@ -137,6 +144,8 @@ export class ChapterOne {
 
             }
         }
+        let p1 = performance.now();
+        console.log("Execution Time in ms: ", p1 - p0);
         this.doPartTwo(data);
     }
 
