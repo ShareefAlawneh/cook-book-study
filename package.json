@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/ShareefAlawneh/cook-book-study#readme",
   "dependencies": {
-    "@types/node": "^10.12.2"
+    "@types/node": "^10.12.2",
+    "line-by-line": "^0.1.6",
+    "replace-in-file": "^3.4.2",
+    "ts-node": "^7.0.1"
   }
 }

@@ -1,6 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as readline from 'readline';
+import * as replace from 'replace-in-file';
+
 
 
 export class ChapterOne {
@@ -9,7 +11,6 @@ export class ChapterOne {
 
     constructor(filePath: string) {
         this.inputFile = filePath;
-
 
     }
 
@@ -22,23 +23,22 @@ export class ChapterOne {
             fs.closeSync(fd);
 
         }
-
-        // return fs.openSync(filePath, fs.constants.R_OK);
-
-
         // return file reader
-        return readline.createInterface(
-            {
-                input: fs.createReadStream(filePath),
-                terminal: false
+        return readline.createInterface(fs.createReadStream(filePath));
+    }
 
-            }
-        );
+    private getLine = function* (filePath: string) {
+        let fileContent: any[] = fs.readFileSync(path.join(__dirname, `../utils/${filePath}`), 'utf-8').split("\n");
+
+        for (let line of fileContent) {
+            if (line == '')
+                return;
+            yield line
+        }
 
 
     }
-
-    private readFileContents = () => fs.readFileSync(path.join(__dirname, '../utils/stop_words.txt'), 'utf-8');
+    private readFileContents = (fileName: string) => fs.readFileSync(path.join(__dirname, `../utils/${fileName}`), 'utf-8');
 
     private isalnum = (str: string) => str.match(/[a-z0-9]/i);
 
@@ -50,7 +50,7 @@ export class ChapterOne {
     // so the real program starts from run() method.
     public run(): void {
 
-        let data: any[] = [this.readFileContents().split(',')]; // stop words file content (maximum 522 chars) #data[0]
+        let data: any[] = [this.readFileContents("stop_words.txt").split(',')]; // stop words file content (maximum 522 chars) #data[0]
 
         data.push([]); // line #data[1]
         data.push(null); // index of start char of the word #data[2]
@@ -60,26 +60,16 @@ export class ChapterOne {
         data.push(''); // a word holder #data[6]
         data.push(0); // freq of word #data[7]
         data.push(0); // a loop tracker #data[8]
-        data.push(false); // indecator for only once #data[9]
-
-
-
-        let word_freqs = this.touchOpen("word_freqs.txt");
-
 
         let freader = this.touchOpen(this.inputFile);
 
-
-
         // loop through the file line by line
         freader.on('line', (line: string) => {
-
-
             if (line == undefined)
                 freader.close();
 
             if (line[line.length - 1] != '\n')
-                line += '\n';
+                line += ' ';
 
             data[1] = [line];
             data[2] = null;
@@ -104,48 +94,42 @@ export class ChapterOne {
 
 
                         if (data[5].length >= 2 && !data[0].includes(data[5].trim())) {
-                            console.log(data[5]);
+                            let wordFreqs = this.getLine("word_freqs.txt");
 
+                            while (true) {
 
+                                let next = wordFreqs.next();
 
-                            if (!data[9]) {
-                                data[9] = true;
-                                this.detemineCount(data);
-                                // word_freqs.emit('line')
-
-
-                            }
-
-                            // this.readWordfreqs(word_freqs, data)
-                            word_freqs.on('line', line => {
-                                console.log("reading")
-                                console.log("line", line)
-                                if (line != undefined) {
-                                    data[6] = line.trim();
-                                    data[7] = parseInt(data[6].split(",")[1]);
-                                    data[6] = data[6].split(",")[0].trim();
-
-
-                                    if (data[5].trim() == data[6].trim()) {
-
-                                        data[7] += 1;
-                                        data[4] = true;
-
-                                        this.detemineCount(data);
-                                        word_freqs.close();
-
-                                    }
-                                } else {
-                                    this.detemineCount(data)
+                                if (next.done || next.value == undefined) {
+                                    break;
                                 }
 
-                            });
+                                data[6] = next.value.trim();
+
+                                data[7] = parseInt(data[6].split(",")[1]);
+                                data[6] = data[6].split(",")[0].trim();
 
 
+                                if (data[5].trim() == data[6].trim()) {
 
+                                    data[7] += 1;
+                                    data[4] = true;
+                                    replace.sync({
+                                        files: path.join(__dirname, `../utils/word_freqs.txt`),
+                                        from: `${next.value}`,
+                                        to: `${data[5]}, ${data[7]}`,
+                                    });
 
+                                    break;
+                                }
 
+                            }
+                            if (!data[4]) {
+                                data[4] = true;
 
+                                fs.writeSync(fs.openSync(path.join(__dirname, `../utils/word_freqs.txt`), 'a'), `${data[5].trim()}, 1\n`);
+
+                            }
                         }
                         data[2] = null;
                     }
@@ -160,35 +144,17 @@ export class ChapterOne {
 
 
         }).on('close', () => {
-
-            this.doPartTwo(data, word_freqs);
+            this.doPartTwo(data);
         });
 
     }
 
 
 
-    detemineCount(data: any[]) {
-
-        if (!data[4]) {
-            fs.writeSync(fs.openSync(path.join(__dirname, `../utils/word_freqs.txt`), 'a'), `${data[5].trim()}, 1\n`);
-
-        }
 
 
-        else {
-            fs.writeSync(fs.openSync(path.join(__dirname, `../utils/word_freqs.txt`), 'a'), `${data[5].trim()}, ${data[7]}\n`);
-
-        }
-    }
-
-    doPartTwo(data: any[], word_freqs: readline.ReadLine) {
-
-        console.log("part one done");
-
-
-
-        // mark the array for garbage collection || flush its contents 
+    doPartTwo(data: any[]) {
+        // mark the array for garbage collection || flush its contents
         data.length = 0;
 
         // ------------------- Part 2 -----------------
@@ -199,32 +165,23 @@ export class ChapterOne {
 
         data.push(0); // loop tracker #data[27]
 
+        let word_freqs = this.touchOpen("word_freqs.txt");
         word_freqs.on('line', (line: string) => {
-
             if (line != undefined) {
                 data[25] = line.trim();
-                data[26] = parseInt(data[25].split(',')[1]);
+                data[26] = parseInt(data[25].split(',')[1].trim());
                 data[25] = data[25].split(',')[0].trim();
 
+                for (data[27] of this.range(25)) {
 
-
-                for (data[27] in this.range(25)) {
-                    if (data[data[27]] == [] || data[data[27]][1] < data[26]) {
+                    if (data[data[27]] == null || data[data[27]][1] < data[26]) {
                         data.splice(data[27], 0, [data[25], data[26]]);
-                        delete data[26];
                         break;
                     }
 
                 }
 
-
-
-
-
             }
-
-
-
 
         }).on('close', () => {
             this.printWords(data);
@@ -233,18 +190,11 @@ export class ChapterOne {
 
 
     printWords(data: any[]) {
-
-
-
         data[27] = "";
 
-
-
         for (data[27] of [...data.splice(0, 25)]) {
-
-            if (data[27].length == 2)
+            if (data[27] && data[27].length == 2)
                 console.log(`${data[27][0]} - ${data[27][1]}`);
-
         }
 
     }
