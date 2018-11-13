@@ -52,19 +52,29 @@ function removeStopWords() {
 function frequencies() {
 
     heap["wordFreqs"] = {};
+    heap["exists"] = false;
+    heap["word"] = '';
     while (stack.length > 0) {
-        if (stack[stack.length - 1] in heap["wordFreqs"]) {
+        for (heap["word"] of Object.keys(heap["wordFreqs"])) {
+            if (stack[stack.length - 1] == heap["word"]) {
+                heap["exists"] = true;
+                break;
+            }
+        }
+
+        if (heap["exists"]) {
             stack.push(heap["wordFreqs"][stack[stack.length - 1]]);
             stack.push(1);
             stack.push(stack.pop() + stack.pop());
+            heap["exists"] = false;
         }
         else {
             stack.push(1);
         }
         heap["freq"] = stack.pop();
         heap["wordFreqs"][stack.pop()] = heap["freq"];
-
     }
+
 
     stack.push(heap["wordFreqs"]);
     delete heap["wordFreqs"];
