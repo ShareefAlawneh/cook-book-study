@@ -1,7 +1,8 @@
 import * as  fs from 'fs';
 import * as path from 'path';
+import { Stack } from '../dataStructure/Stack';
 
-let stack = [];
+let stack = new Stack<any>();
 
 let heap = {};
 
@@ -28,12 +29,12 @@ function scan() {
 function removeStopWords() {
     let stopWords = fs.readFileSync(path.join(__dirname, `../utils/stop_words.txt`), 'utf-8');
     stack.push(stopWords.split(','));
-    stack[stack.length - 1].push(...Array.from('abcdefghijklmnopqrstuvwxyz'));
+    stack.top().push(...Array.from('abcdefghijklmnopqrstuvwxyz'));
 
     heap["stopWords"] = stack.pop();
     heap["words"] = [];
-    while (stack.length > 0) {
-        if (heap["stopWords"].indexOf(stack[stack.length - 1]) > -1) {
+    while (!stack.isEmpty()) {
+        if (heap["stopWords"].indexOf(stack.top()) > -1) {
             stack.pop();
         }
         else {
@@ -54,16 +55,16 @@ function frequencies() {
     heap["wordFreqs"] = {};
     heap["exists"] = false;
     heap["word"] = '';
-    while (stack.length > 0) {
+    while (!stack.isEmpty()) {
         for (heap["word"] of Object.keys(heap["wordFreqs"])) {
-            if (stack[stack.length - 1] == heap["word"]) {
+            if (stack.top() == heap["word"]) {
                 heap["exists"] = true;
                 break;
             }
         }
 
         if (heap["exists"]) {
-            stack.push(heap["wordFreqs"][stack[stack.length - 1]]);
+            stack.push(heap["wordFreqs"][stack.top()]);
             stack.push(1);
             stack.push(stack.pop() + stack.pop());
             heap["exists"] = false;
@@ -101,7 +102,7 @@ export function run() {
 
     stack.push(0);
 
-    while (stack[stack.length - 1] < 25 && stack.length > 1) {
+    while (stack.top() < 25 && stack.size() > 1) {
         heap["i"] = stack.pop();
         let [w, f] = stack.pop();
         console.log(`${w} - ${f}`);
