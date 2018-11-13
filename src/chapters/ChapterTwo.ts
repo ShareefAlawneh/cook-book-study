@@ -79,6 +79,8 @@ function frequencies() {
     stack.push(heap["wordFreqs"]);
     delete heap["wordFreqs"];
     delete heap["ffreq"];
+    delete heap["exists"];
+    delete heap["word"];
 
 
 }
