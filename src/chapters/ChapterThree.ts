@@ -40,13 +40,6 @@ export function run() {
                                 if (!stopWords.includes(word.trim()))
                                     wordFreqs.push([word, 1]);
                             }
-                            else if (wordFreqs.length > 1) {
-                                for (let n in Array.from(Array(pairIndex).keys()).reverse()) {
-                                    if (wordFreqs[pairIndex][1] > wordFreqs[n][1]) {
-                                        [wordFreqs[n], wordFreqs[pairIndex]] = [wordFreqs[pairIndex], wordFreqs[n]];
-                                    }
-                                }
-                            }
                         }
                         startChar = null;
                     }
@@ -55,6 +48,15 @@ export function run() {
             }
         });
 
+    //linear sort, unfortunately i can't use quick sort in this style as i can't use the built in sort function in js :(
+    for (let n of Array.from(Array(wordFreqs.length).keys())) {
+        for (let j of Array.from(Array(wordFreqs.length).keys())) {
+            if (wordFreqs[n][1] > wordFreqs[j][1]) {
+                [wordFreqs[j], wordFreqs[n]] = [wordFreqs[n], wordFreqs[j]];
+                break;
+            }
+        }
+    }
 
     for (let tf of [...wordFreqs.slice(0, 25)]) {
         console.log(`${tf[0]} - ${tf[1]}`);
