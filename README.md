@@ -17,5 +17,7 @@ for performace, you made its day, because as i said early, from computer arch po
 that we are talking about (I/O) operations, which means alot of time wasting; but, all the factors are calculated in related to the memory, while memory happy, all other factors will be happy.
 
 
-
+# chapter3 cc calculation:
+if i counted it right, we have a 35 node (instruction) with 28 path (work flow) and we have a one end of program.
+by the equation `CC = E - N + 2P` the result is `35 - 28 + (2 * 1) = 9` not ideal, but we still in the safe side :D
 
