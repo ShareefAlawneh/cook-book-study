@@ -147,14 +147,6 @@ export class ChapterOne {
         }
         let p1 = performance.now();
         console.log("Execution Time in ms: ", p1 - p0);
-        this.doPartTwo(data);
-    }
-
-
-
-
-
-    doPartTwo(data: any[]) {
         // mark the array for garbage collection || flush its contents
         data.length = 0;
 
@@ -185,20 +177,28 @@ export class ChapterOne {
             }
 
         }).on('close', () => {
-            this.printWords(data);
+            data[27] = "";
+
+            for (data[27] of [...data.splice(0, 25)]) {
+                if (data[27] && data[27].length == 2)
+                    console.log(`${data[27][0]} - ${data[27][1]}`);
+            }
         });
     }
 
 
-    printWords(data: any[]) {
-        data[27] = "";
 
-        for (data[27] of [...data.splice(0, 25)]) {
-            if (data[27] && data[27].length == 2)
-                console.log(`${data[27][0]} - ${data[27][1]}`);
-        }
 
-    }
+
+    // doPartTwo(data: any[]) {
+
+    // }
+
+
+    // printWords(data: any[]) {
+
+
+    // }
 
 
 

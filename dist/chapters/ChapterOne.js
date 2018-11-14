@@ -77,6 +77,7 @@ var ChapterOne = /** @class */ (function () {
     // and the global variable, came from program argv[],
     // so the real program starts from run() method.
     ChapterOne.prototype.run = function () {
+        var _this = this;
         var data = [this.readFileContents("stop_words.txt").split(',')]; // stop words file content (maximum 522 chars) #data[0]
         data.push([]); // line #data[1]
         data.push(null); // index of start char of the word #data[2]
@@ -146,10 +147,6 @@ var ChapterOne = /** @class */ (function () {
         }
         var p1 = perf_hooks_1.performance.now();
         console.log("Execution Time in ms: ", p1 - p0);
-        this.doPartTwo(data);
-    };
-    ChapterOne.prototype.doPartTwo = function (data) {
-        var _this = this;
         // mark the array for garbage collection || flush its contents
         data.length = 0;
         // ------------------- Part 2 -----------------
@@ -173,16 +170,13 @@ var ChapterOne = /** @class */ (function () {
                 }
             }
         }).on('close', function () {
-            _this.printWords(data);
+            data[27] = "";
+            for (var _i = 0, _a = data.splice(0, 25).slice(); _i < _a.length; _i++) {
+                data[27] = _a[_i];
+                if (data[27] && data[27].length == 2)
+                    console.log(data[27][0] + " - " + data[27][1]);
+            }
         });
-    };
-    ChapterOne.prototype.printWords = function (data) {
-        data[27] = "";
-        for (var _i = 0, _a = data.splice(0, 25).slice(); _i < _a.length; _i++) {
-            data[27] = _a[_i];
-            if (data[27] && data[27].length == 2)
-                console.log(data[27][0] + " - " + data[27][1]);
-        }
     };
     return ChapterOne;
 }());
