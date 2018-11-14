@@ -87,16 +87,17 @@ var ChapterOne = /** @class */ (function () {
         data.push(0); // freq of word #data[7]
         data.push(0); // a loop tracker #data[8]
         data.push(0); // bytes indecator #data[9]
-        var buffer = new Buffer(46 * 2); // a buffer will hold 3 lines each one has at most 88 chars + 1 \n = 89, in the file i used a lines with 45 chars (bytes)
-        data[9] = fs.readSync(fs.openSync(path.join(__dirname, "../utils/fileToRead.txt"), 'r'), buffer, 0, buffer.length, data[9]);
+        data.push(new Buffer(46 * 2));
+        // let data[10] = new Buffer(46 * 2); // a buffer will hold 3 lines each one has at most 88 chars + 1 \n = 89, in the file i used a lines with 45 chars (bytes)
+        data[9] = fs.readSync(fs.openSync(path.join(__dirname, "../utils/fileToRead.txt"), 'r'), data[10], 0, data[10].length, data[9]);
         var p0 = perf_hooks_1.performance.now();
         // loop through the file line by line
         while (data[9]) {
-            if (fs.readSync(fs.openSync(path.join(__dirname, "../utils/fileToRead.txt"), 'r'), buffer, 0, buffer.length, data[9]))
-                data[9] += fs.readSync(fs.openSync(path.join(__dirname, "../utils/fileToRead.txt"), 'r'), buffer, 0, buffer.length, data[9]);
+            if (fs.readSync(fs.openSync(path.join(__dirname, "../utils/fileToRead.txt"), 'r'), data[10], 0, data[10].length, data[9]))
+                data[9] += fs.readSync(fs.openSync(path.join(__dirname, "../utils/fileToRead.txt"), 'r'), data[10], 0, data[10].length, data[9]);
             else
                 data[9] = 0;
-            data[1] = [buffer.toString('utf-8').replace(new RegExp('\r\n', 'g'), ' ').replace(new RegExp('\u0000', 'g'), ' ')];
+            data[1] = [data[10].toString('utf-8').replace(new RegExp('\r\n', 'g'), ' ').replace(new RegExp('\u0000', 'g'), ' ')];
             data[2] = null;
             data[3] = 0;
             for (var _i = 0, _a = data[1][0]; _i < _a.length; _i++) {
