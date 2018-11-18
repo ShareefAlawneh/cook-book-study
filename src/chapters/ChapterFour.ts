@@ -75,9 +75,6 @@ function sort(wordFreqs: any[]) {
 }
 
 export function run() {
-
-    ;
-
     for (let tf of [...sort(frequencies(removeStopWords(scan(filterCharsAndNormalize(readFile("fileToRead.txt")))))).slice(0, 25)])
         console.log(`${tf[0]} - ${tf[1]}`);
 }

@@ -49,8 +49,20 @@ if i counted it right, we have a 35 node (instruction) with 28 path (work flow) 
 by the equation `CC = E - N + 2P` the result is `35 - 28 + (2 * 1) = 9` not ideal, but we still in the safe side :D
 
 
-#chapter4 eliminate global variables:
+# chapter4 eliminate global variables:
 
 In order to eliminate global variables into scoped variables, i used two ways, the first one by using immideate invoked function,
 the other way by chaining the function calls so each one will be waiting for the side effect of the previous one.
-I commited the two ways
+I commited the two ways.
+
+
+# chapter 4 idempotent functions:
+
+by returning the program to its original state, there are three idempotent functions:
+
+1- filterCharsAndNormalize
+2- removeStopWords
+3- sort
+
+
+we already made all functions idempotent by using the scoped variables (not in the IIF method).
