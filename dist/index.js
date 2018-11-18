@@ -1,10 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // import { run } from './chapters/ChapterTwo';
-var ChapterOne_1 = require("./chapters/ChapterOne");
+// import { ChapterOne } from './chapters/ChapterOne';
 // import { run } from './chapters/ChapterThree';
-var chapterOne = new ChapterOne_1.ChapterOne("fileToRead.txt");
-chapterOne.run();
+var ChapterFour_1 = require("./chapters/ChapterFour");
+// let chapterOne = new ChapterOne("fileToRead.txt");
+// chapterOne.run();
 // run();     // chapter 2
 // run(); // chapter 3
+ChapterFour_1.run(); // chapter 4
 //# sourceMappingURL=index.js.map
