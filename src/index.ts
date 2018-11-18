@@ -1,7 +1,7 @@
 // import { run } from './chapters/ChapterTwo';
 // import { ChapterOne } from './chapters/ChapterOne';
 // import { run } from './chapters/ChapterThree';
-import run from './chapters/ChapterFour';
+import { run } from './chapters/ChapterFour';
 // let chapterOne = new ChapterOne("fileToRead.txt");
 // chapterOne.run();
 
@@ -10,4 +10,4 @@ import run from './chapters/ChapterFour';
 
 // run(); // chapter 3
 
-run; // chapter 4
+run(); // chapter 4
