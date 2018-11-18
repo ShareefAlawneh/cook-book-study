@@ -14,10 +14,11 @@ function filterCharsAndNormalize(data: string) {
 function scan(data: string) {
     return data.split(/[\s,]+/);
 }
-
 function removeStopWords(words: any[]) {
-    let stopWords = [...fs.readFileSync(path.join(__dirname, '../utils/stop_words.txt'), 'utf-8').split(',')];
+
+    let stopWords = [...fs.readFileSync(path.join(__dirname, `../utils/${words[words.length - 1]}`), 'utf-8').split(',')];
     stopWords.push(...Array.from("abcdefghijklmnopqrstuvwxyz"));
+    words.splice(words.length - 1, 1);
     return words.filter((w) => !stopWords.includes(w));
 }
 
@@ -45,5 +46,9 @@ function printAll(wordFreqs: [string, {}][]) {
 }
 
 export function run() {
-    printAll(sort(frequencies(removeStopWords(scan(filterCharsAndNormalize(readFile("fileToRead.txt")))))))
+    let argv = [];
+    argv[0] = "fileToRead.txt";
+    argv[1] = "stop_words.txt";
+
+    printAll(sort(frequencies(removeStopWords(scan(filterCharsAndNormalize(readFile(argv[0]))).concat(argv[1])))));
 }
