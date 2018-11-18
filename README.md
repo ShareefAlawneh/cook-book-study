@@ -1,5 +1,32 @@
 # cook-book-study
-**chapters overview**
+
+
+# chapters overview : 
+
+**chapter1:** i am lucky to be from the modern school, and unfortunuty i was not a part of the old school before.
+              i am lucky because i can easily use variables and define abstractions, and i am sad because i should 
+              read about the old school before this time, managing the memory for the application is not that easy
+              it will upgrade your mind to think totaly diffrent about how the things go, keeping your mind fresh
+              to manage the data accross the entier application thats what make a real programmer, these days i do'nt
+              have to do that, we have larger memory now, with smarter compilers that can manage memory for us in most 
+              cases, but it was awesome to learn how old school was.
+
+**chapter2:** this was the most chapter i liked until now, alot of logic, alot of beauty in dealing with things, its closer
+              to the technique of how the compilers works (stack based compilers), i was totally involved in this chapter.
+              
+**chapter3:** that is what we called spaghetti code these days, i did not like the approuch as i am trying to not use it
+              in my own code, it may be a good for performance to left functions (you know function calls is a branch operation),
+              but that will defenitlly lead to un maintainable code.
+              
+**chapter4:** i think its very common way to write code these days, alot of features needs this approuch -with pointing out- the       
+              dangereous of globals, the shared state is kind of danger thing in the applications, but some times it must.
+              so i keep try to use it when it must, not when it should.
+              
+              
+              
+ 
+ # chapter1 exc
+
 from computer arch point of view, 
 reading from main memory is much better than reading from secondary memory (for cpu).
 
