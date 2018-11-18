@@ -1,11 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+// in es2015 let will be determined as var which will make the variable global on the context of `this` (global context)
 
-function readFile(fileName: string) {
-    let data = [];
+
+
+function readFile(fileName: string, data: any[]) {
     data.push(...fs.readFileSync(path.join(__dirname, `../utils/${fileName}`), 'utf-8').split(""));
-    return data;
 }
 
 function filterCharsAndNormalize(data: any[]) {
@@ -17,14 +18,11 @@ function filterCharsAndNormalize(data: any[]) {
         }
     }
 
-    return data;
 }
 
-function scan(data: any[]) {
-    let words = [];
+function scan(data: any[], words: any[]) {
     let dataStr = data.join("");
     words.push(...dataStr.split(/[\s,]+/));
-    return words;
 }
 
 function removeStopWords(words: any[]) {
@@ -41,12 +39,9 @@ function removeStopWords(words: any[]) {
     for (let i of indexes.reverse()) {
         words.splice(i, 1);
     }
-
-    return words;
 }
 
-function frequencies(words: any[]) {
-    let wordFreqs = [];
+function frequencies(words: any[], wordFreqs: any[]) {
     for (let w of words) {
         let keys = wordFreqs.map(wd => wd[0]);
         if (keys.includes(w)) {
@@ -56,8 +51,6 @@ function frequencies(words: any[]) {
             wordFreqs.push([w, 1]);
         }
     }
-
-    return wordFreqs;
 
 
 }
@@ -71,10 +64,19 @@ function sort(wordFreqs: any[]) {
             }
         }
     }
-    return wordFreqs;
 }
 
 export function run() {
-    for (let tf of [...sort(frequencies(removeStopWords(scan(filterCharsAndNormalize(readFile("fileToRead.txt")))))).slice(0, 25)])
+    let data = [];
+    let words = [];
+    let wordFreqs = [];
+    readFile("fileToRead.txt", data);
+    filterCharsAndNormalize(data);
+    scan(data, words);
+    removeStopWords(words);
+    frequencies(words, wordFreqs);
+    sort(wordFreqs);
+
+    for (let tf of [...wordFreqs.slice(0, 25)])
         console.log(`${tf[0]} - ${tf[1]}`);
 }
