@@ -6,6 +6,7 @@ import * as path from 'path';
 
 
 function readFile(fileName: string, data: any[]) {
+    data = [];
     data.push(...fs.readFileSync(path.join(__dirname, `../utils/${fileName}`), 'utf-8').split(""));
 }
 
@@ -21,6 +22,7 @@ function filterCharsAndNormalize(data: any[]) {
 }
 
 function scan(data: any[], words: any[]) {
+    words = [];
     let dataStr = data.join("");
     words.push(...dataStr.split(/[\s,]+/));
 }
@@ -42,6 +44,7 @@ function removeStopWords(words: any[]) {
 }
 
 function frequencies(words: any[], wordFreqs: any[]) {
+    wordFreqs = [];
     for (let w of words) {
         let keys = wordFreqs.map(wd => wd[0]);
         if (keys.includes(w)) {

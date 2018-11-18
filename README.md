@@ -51,10 +51,12 @@ by the equation `CC = E - N + 2P` the result is `35 - 28 + (2 * 1) = 9` not idea
 
 # chapter4 eliminate global variables:
 
-In order to eliminate global variables into scoped variables, i used two ways, the first one by using immideate invoked function,
-the other way by chaining the function calls so each one will be waiting for the side effect of the previous one.
-I commited the two ways.
+In order to eliminate global variables into scoped variables, i used three ways, the first one by using immideate invoked function,
+the other way by chaining the function calls so each one will be waiting for the side effect of the previous one, the final way is by 
+scoping the code in one main function.
+I commited the three ways.
 
+note: the second way is calling a pipeline which will be highlighted in the 5th chapter
 
 # chapter 4 idempotent functions:
 
@@ -65,4 +67,5 @@ by returning the program to its original state, there are three idempotent funct
 3- sort
 
 
-we already made all functions idempotent by using the scoped variables (not in the IIF method).
+we already made all functions idempotent by using the scoped variables (in the pipeline way).
+or we can re initialize the arguments in the not idempotent functions
