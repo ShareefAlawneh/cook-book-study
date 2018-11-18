@@ -1,5 +1,5 @@
 # cook-book-study
-
+**chapters overview**
 from computer arch point of view, 
 reading from main memory is much better than reading from secondary memory (for cpu).
 
