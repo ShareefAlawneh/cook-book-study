@@ -21,7 +21,14 @@
 **chapter4:** i think its very common way to write code these days, alot of features needs this approuch -with pointing out- the       
               dangereous of globals, the shared state is kind of danger thing in the applications, but some times it must.
               so i keep try to use it when it must, not when it should.
-              
+
+**chapter5:**  its kind of special case of cookbook style, elimination of the global variable in such way, will surely leads
+               to pipe-lining the functions, its commonly used in programming (at least for me :D)
+
+**chapter6:** Not always the shortest is the best, i know that less code = less bugs, but sometimes you need to be clear in your code
+              i like the style, but sometimes i try to avoid it.
+               
+               
               
               
  
