@@ -31,6 +31,9 @@
 **chapter7:** i think this is the very suitable style for this kind of processes, when i need to go through the same process more and more
               with a break condition at the end (traversing). but in javascript i'd rather prefer using of higher order functions such as `map`, `filter`
 
+**chapter8:** this style is commonly named even-driven approach, wich is a widely used concept in javascript, many libraries in js based
+              on this kind of approach, like JQuery, even javascript it self uses this usually, its a powerfull concept that will make the code execution on demand, so i cant filter characters without reading the file first, it is easy to read and understand (at least for me :D), and its very important for non-blocking environments like js.                
+
                
               
               
