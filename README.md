@@ -34,6 +34,11 @@
 **chapter8:** this style is commonly named even-driven approach, wich is a widely used concept in javascript, many libraries in js based
               on this kind of approach, like JQuery, even javascript it self uses this usually, its a powerfull concept that will make the code execution on demand, so i cant filter characters without reading the file first, it is easy to read and understand (at least for me :D), and its very important for non-blocking environments like js.                
 
+**chapter9:** mondas is a widely used concept in javascript, every day we used this concept without knowing its name, in higher order
+              functions in general, like (map, filter, promises...etc), each function executes something and bind to the next one just 
+              like waterfall, it may be difficult to understand from the first time, but it would make the life better, the previous style
+              may lead to what called callback hell, i can bass any callback as a second argument which may breaks the application, the bind will make it easier to follow and exception detecting.  
+
                
               
               
