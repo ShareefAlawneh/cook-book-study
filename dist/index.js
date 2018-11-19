@@ -7,8 +7,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // import { run } from './chapters/ChapterFive';
 // import { run } from './chapters/ChapterSix';
 // import { run } from './chapters/ChapterSeven';
-var ChapterEight_1 = require("./chapters/ChapterEight");
+// import { run } from './chapters/ChapterEight';
+var ChapterNine_1 = require("./chapters/ChapterNine");
 // let chapterOne = new ChapterOne("fileToRead.txt");
 // chapterOne.run();
-ChapterEight_1.run();
+ChapterNine_1.run();
 //# sourceMappingURL=index.js.map
