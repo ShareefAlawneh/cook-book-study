@@ -28,8 +28,8 @@
 **chapter6:** Not always the shortest is the best, i know that less code = less bugs, but sometimes you need to be clear in your code
               i like the style, but sometimes i try to avoid it.
 
-**chapter7:** i think this is the very suitable style for this kind of processes, when i need to go throw the same process more and more
-              with a break condition at the end. but in javascript i'd rather prefer using of higher order functions such as `map`, `filter`
+**chapter7:** i think this is the very suitable style for this kind of processes, when i need to go through the same process more and more
+              with a break condition at the end (traversing). but in javascript i'd rather prefer using of higher order functions such as `map`, `filter`
 
                
               
