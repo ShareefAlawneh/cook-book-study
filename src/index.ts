@@ -3,7 +3,8 @@
 // import { run } from './chapters/ChapterThree';
 // import { run } from './chapters/ChapterFour';
 // import { run } from './chapters/ChapterFive';
-import { run } from './chapters/ChapterSix';
+// import { run } from './chapters/ChapterSix';
+import { run } from './chapters/ChapterSeven';
 
 
 
@@ -11,9 +12,4 @@ import { run } from './chapters/ChapterSix';
 // chapterOne.run();
 
 
-// run();     // chapter 2
-
-// run(); // chapter 3
-
-// run(); // chapter 4
-run(); // chapter 5
+run();
