@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+
 class TFTheOne {
     private _value;
     constructor(v) {
@@ -65,17 +66,34 @@ function top25Words(wordFreqs: []) {
     return top25;
 }
 
+function wrap(valueToWrap) {
+    return () => valueToWrap;
+}
+
+function bind(wrappedValue, callback) {
+    return callback(wrappedValue());
+}
+
+function printMe(value) {
+    console.log(value);
+}
 
 export function run() {
 
-    new TFTheOne("fileToRead.txt")
-        .bind(readFile)
-        .bind(filterChars)
-        .bind(normalize)
-        .bind(scan)
-        .bind(removeStopWords)
-        .bind(frequencies)
-        .bind(sort)
-        .bind(top25Words)
-        .printMe();
+    // new TFTheOne("fileToRead.txt")
+    //     .bind(readFile)
+    //     .bind(filterChars)
+    //     .bind(normalize)
+    //     .bind(scan)
+    //     .bind(removeStopWords)
+    //     .bind(frequencies)
+    //     .bind(sort)
+    //     .bind(top25Words)
+    //     .printMe();
+
+
+
+
+    // I HATE FUNCTIONAL PROGRAMMING :D
+    printMe(bind(wrap(bind(wrap(bind(wrap(bind(wrap(bind(wrap(bind(wrap(bind(wrap(bind(wrap("fileToRead.txt"), readFile)), filterChars)), normalize)), scan)), removeStopWords)), frequencies)), sort)), top25Words));
 }
