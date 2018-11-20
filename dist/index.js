@@ -10,11 +10,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // import { run } from './chapters/ChapterEight';
 // import { run } from './chapters/ChapterNine';
 // import { WordFrequencyController } from './chapters/ChapterTen';
-var Chapter11_1 = require("./chapters/Chapter11");
+// import { WordFrequencyController } from './chapters/Chapter11';
+var Chapter12_1 = require("./chapters/Chapter12");
 // let chapterOne = new ChapterOne("fileToRead.txt");
 // chapterOne.run();
-// run();
-var wfc = new Chapter11_1.WordFrequencyController();
-wfc.dispatch(['init', 'fileToRead.txt']);
-wfc.dispatch(['run']);
+Chapter12_1.run();
+// let wfc = new WordFrequencyController();
+// wfc.dispatch(['init', 'fileToRead.txt']);
+// wfc.dispatch(['run']);
 //# sourceMappingURL=index.js.map
