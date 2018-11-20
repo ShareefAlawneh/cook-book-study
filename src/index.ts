@@ -7,7 +7,8 @@
 // import { run } from './chapters/ChapterSeven';
 // import { run } from './chapters/ChapterEight';
 // import { run } from './chapters/ChapterNine';
-import { WordFrequencyController } from './chapters/ChapterTen';
+// import { WordFrequencyController } from './chapters/ChapterTen';
+import { WordFrequencyController } from './chapters/Chapter11';
 
 
 
@@ -18,4 +19,6 @@ import { WordFrequencyController } from './chapters/ChapterTen';
 // run();
 let wfc = new WordFrequencyController();
 
-wfc.run();
+wfc.dispatch(['init', 'fileToRead.txt']);
+wfc.dispatch(['run']);
+
