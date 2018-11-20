@@ -1,16 +1,34 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+
+class Delegator {
+
+    dispatch(message: string[]) {
+        if (message[0] == 'info') {
+            return this.info(message[1]);
+        } else {
+            throw (`Message Not UnderStod: ${message[0]}`);
+        }
+    }
+
+    info(self) {
+        return self.constructor.name;
+    }
+}
+
 class DataStorageManager {
 
     private _data: string = "";
 
-    dispatch(message: string[]) {
+    dispatch(message: any[]) {
         if (message[0] == "init") {
             return this.init(message[1]);
         }
         else if (message[0] == "words") {
             return this.words();
+        } else if (message[0] == 'info') {
+            return `${message[1].dispatch(['info', this])}: my main data structure is ${this._data.constructor.name}`;
         } else {
             throw (`Message Not UnderStod: ${message[0]}`);
         }
@@ -29,11 +47,13 @@ class DataStorageManager {
 class StopWordsManager {
     private _stopWords: string[] = [];
 
-    dispatch(message: string[]) {
+    dispatch(message: any[]) {
         if (message[0] == "init") {
             return this.init();
         } else if (message[0] == "isStopWord") {
             return this.isStopWord(message[1]);
+        } else if (message[0] == 'info') {
+            return `${message[1].dispatch(['info', this])}: my main data structure is ${this._stopWords.constructor.name}`;
         } else {
             throw (`Message Not UnderStod: ${message[0]}`);
         }
@@ -51,11 +71,13 @@ class StopWordsManager {
 class WordFrequencyManager {
     private _wordFreqs: {} = {};
 
-    dispatch(message: string[]) {
+    dispatch(message: any[]) {
         if (message[0] == "incrementCount") {
             return this.incrementCount(message[1]);
         } else if (message[0] == "sorted") {
             return this.sorted();
+        } else if (message[0] == 'info') {
+            return `${message[1].dispatch(['info', this])}: my main data structure is ${this._wordFreqs.constructor.name}`;
         } else {
             throw (`Message Not UnderStod: ${message[0]}`);
         }
@@ -81,6 +103,8 @@ export class WordFrequencyController {
     private _stopWordsManager: StopWordsManager;
     private _wordsFrequencyManager: WordFrequencyManager;
 
+    private _deligator: Delegator;
+
 
     dispatch(message: string[]) {
         if (message[0] == "init") {
@@ -97,6 +121,13 @@ export class WordFrequencyController {
         this._storageMangae = new DataStorageManager();
         this._stopWordsManager = new StopWordsManager();
         this._wordsFrequencyManager = new WordFrequencyManager();
+        this._deligator = new Delegator();
+
+        console.log(this._storageMangae.dispatch(['info', this._deligator]));
+        console.log(this._stopWordsManager.dispatch(['info', this._deligator]));
+        console.log(this._wordsFrequencyManager.dispatch(['info', this._deligator]));
+
+        console.log("//-----------------------------//");
 
         this._storageMangae.dispatch(['init', fileName]);
         this._stopWordsManager.dispatch(['init']);
