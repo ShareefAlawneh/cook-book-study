@@ -43,6 +43,12 @@
 
 **chapter10:** this is the modern approach, but i think it would be better if we used an abstract class instead of concreat class to                     extend, the main class is highliy coupled to the three class managers  
 
+**chapter11:** the message dispatch approach is very simmillar to react-redux package, dispatching a message that end up with firing 
+               a program, this allows to dynamically invoke methods wich is very usefull.
+               a delegation in oop is another concept of dynamic invoking, the main advantage of this, when you have a block of code, let we say a restAPI controller, and i want to send sms after proccessing data, suppose after a while i want to send an email 
+               this will lead to edit the controller and re-compile with a possibity of bugs, suppose i want to do some image proccessing,
+               this will make the job harder, delegation solve these kind of problems when i want to determine what to do at run time    
+
                
               
               
