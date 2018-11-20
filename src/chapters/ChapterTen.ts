@@ -1,11 +1,20 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+class TFExcersise {
 
-class DataStorageManager {
+    constructor() {
+
+    }
+    info() {
+        return this.constructor.name;
+    }
+}
+class DataStorageManager extends TFExcersise {
 
     private _data: string;
     constructor(fileName: string) {
+        super();
         this._data = fs.readFileSync(path.join(__dirname, `../utils/${fileName}`), 'utf-8').split("").join("")
             .replace(new RegExp('[^a-zA-Z0-9]+'), ' ');
     }
@@ -13,11 +22,16 @@ class DataStorageManager {
     words() {
         return this._data.split(/[\s,]+/);
     }
+
+    info() {
+        return `${super.info()}: my data structer is  ${this._data.constructor.name}`;
+    }
 }
 
-class StopWordsManager {
+class StopWordsManager extends TFExcersise {
     private _stopWords: string[];
     constructor() {
+        super();
         this._stopWords = fs.readFileSync(path.join(__dirname, `../utils/stop_words.txt`), 'utf-8').split(",");
         this._stopWords.push(...Array.from("abcdefghijklmnopqrstuvwxyz"));
     }
@@ -25,12 +39,18 @@ class StopWordsManager {
     isStopWord(word) {
         return this._stopWords.indexOf(word) > -1;
     }
+
+    info() {
+        return `${super.info()}: my data structer is  ${this._stopWords.constructor.name}`;
+    }
+
 }
 
-class WordFrequencyManager {
+class WordFrequencyManager extends TFExcersise {
 
     private _wordFreqs: {};
     constructor() {
+        super();
         this._wordFreqs = {};
     }
 
@@ -46,6 +66,10 @@ class WordFrequencyManager {
     sorted() {
         return [...Object.entries(this._wordFreqs).sort((a: any, b: any) => b[1] - a[1])];
     }
+
+    info() {
+        return `${super.info()}: my data structer is  ${this._wordFreqs.constructor.name}`;
+    }
 }
 
 
@@ -60,6 +84,10 @@ export class WordFrequencyController {
     }
 
     run() {
+        console.log(this._storageManager.info());
+        console.log(this._stopWordManager.info());
+        console.log(this._wordFrequencyManager.info());
+        console.log("//-------------------------//");
         for (let w of this._storageManager.words()) {
             if (!this._stopWordManager.isStopWord(w)) {
                 this._wordFrequencyManager.incrementCount(w);
