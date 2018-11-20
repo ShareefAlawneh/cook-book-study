@@ -6,7 +6,8 @@
 // import { run } from './chapters/ChapterSix';
 // import { run } from './chapters/ChapterSeven';
 // import { run } from './chapters/ChapterEight';
-import { run } from './chapters/ChapterNine';
+// import { run } from './chapters/ChapterNine';
+import { WordFrequencyController } from './chapters/ChapterTen';
 
 
 
@@ -14,4 +15,7 @@ import { run } from './chapters/ChapterNine';
 // chapterOne.run();
 
 
-run();
+// run();
+let wfc = new WordFrequencyController();
+
+wfc.run();
