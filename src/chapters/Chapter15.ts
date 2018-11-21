@@ -17,6 +17,12 @@ class EventManager {
         }
     }
 
+    unsubscripe(eventType, handler) {
+        if (eventType in this._subscriptions) {
+            this._subscriptions[eventType].splice(this._subscriptions[eventType].indexOf(handler), 1);
+        }
+    }
+
     publish(event) {
         let eventType = event[0];
         if (eventType in this._subscriptions) {
@@ -35,18 +41,29 @@ class DataStorage {
         this._eventManager = eventManager;
         this._eventManager.subscribe('load', this.load);
         this._eventManager.subscribe('start', this.produceWords);
+        this._eventManager.subscribe('distroy', this.distroy);
     }
 
     private load = (event) => {
         this._data = fs.readFileSync(path.join(__dirname, `../utils/${event[1]}`), 'utf-8').split("").join("")
             .replace(new RegExp('[^a-zA-Z0-9]+'), ' ').toLowerCase();
+
     }
 
     private produceWords = () => {
         for (let word of this._data.split(/[\s,]+/)) {
             this._eventManager.publish(['word', word]);
         }
+
         this._eventManager.publish(['eof', null]);
+    }
+
+    private distroy = (event) => {
+
+        console.log(`Destroy ${this.constructor.name}`)
+        this._eventManager.unsubscripe('load', this.load);
+        this._eventManager.unsubscripe('start', this.produceWords);
+
     }
 }
 
@@ -58,6 +75,7 @@ class StopWordsFilter {
         this._eventManager = eventManager;
         this._eventManager.subscribe('load', this.load);
         this._eventManager.subscribe('word', this.isStopWord);
+        this._eventManager.subscribe('distroy', this.distroy);
     }
 
     private load = () => {
@@ -72,6 +90,17 @@ class StopWordsFilter {
         }
     }
 
+
+    private distroy = (event) => {
+
+        console.log(`Destroy ${this.constructor.name}`)
+        this._eventManager.unsubscripe('load', this.load);
+        this._eventManager.unsubscripe('word', this.isStopWord);
+
+    }
+
+
+
 }
 
 class WordFrequencyCounter {
@@ -81,6 +110,7 @@ class WordFrequencyCounter {
         this._eventManager = eventManager;
         this._eventManager.subscribe('validWord', this.incrementCount);
         this._eventManager.subscribe('print', this.printAll);
+        this._eventManager.subscribe('distroy', this.distroy);
     }
 
     incrementCount = (event) => {
@@ -97,7 +127,16 @@ class WordFrequencyCounter {
         for (let wf of [...wordFreqs.slice(0, 25)]) {
             console.log(wf[0], '-', wf[1]);
         }
+        console.log('//----------------------//');
     }
+
+    private distroy = (event) => {
+
+        console.log(`Destroy ${this.constructor.name}`)
+        this._eventManager.unsubscripe('validWord', this.incrementCount);
+        this._eventManager.unsubscripe('print', this.printAll);
+    }
+
 }
 
 class WordWithLetterCounter {
@@ -109,6 +148,7 @@ class WordWithLetterCounter {
         this._eventManager = eventManager;
         this._eventManager.subscribe('validWord', this.incrementCount);
         this._eventManager.subscribe('print', this.printWords);
+        this._eventManager.subscribe('distroy', this.distroy);
     }
 
     private incrementCount = (event) => {
@@ -118,10 +158,19 @@ class WordWithLetterCounter {
                 this._wordsDistinct.push(event[1]);
             }
         }
+
     }
 
-    printWords = (event) => {
+    private printWords = (event) => {
         console.log(`${this._words.length} word(s) has the letter a (in total),\n${this._wordsDistinct.length} word(s) has letter a (ditinct)`);
+        console.log('//----------------------//');
+    }
+
+    private distroy = (event) => {
+
+        console.log(`Destroy ${this.constructor.name}`)
+        this._eventManager.unsubscripe('validWord', this.incrementCount);
+        this._eventManager.unsubscripe('print', this.printWords);
 
     }
 
@@ -143,6 +192,7 @@ class WordFrequencyApplication {
 
     private stop = () => {
         this._eventManager.publish(['print', null]);
+        this._eventManager.publish(['distroy', null]);
     }
 }
 
