@@ -54,7 +54,7 @@
                its a very good design pattern, where every thing is independant and you can use it by its own.
 
 **chapter13:** this is very common, in case we want the interface still the same with changing the implementation, the benifit will shine when 
-               tryng to something sharable, that other things depends on.              
+               tryng to something sharable, that other things depends on. which somehow applies the open-close concept.               
                
               
               
