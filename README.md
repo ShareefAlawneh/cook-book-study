@@ -49,6 +49,9 @@
                this will lead to edit the controller and re-compile with a possibity of bugs, suppose i want to do some image proccessing,
                this will make the job harder, delegation solve these kind of problems when i want to determine what to do at run time    
 
+**chapter12:** the old way in js to declare classes, it allows us to clone the object to other one, its also provide us the mechanisim  to
+               extend the object at run time, without touching the base implementation. and its apllying the self contained components concept,
+               its a very good design pattern, where every thing is independant and you can use it by its own.
                
               
               
