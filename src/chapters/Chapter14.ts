@@ -107,10 +107,36 @@ class WordFrequencyCounter {
     }
 }
 
+class WordsWithACounter {
+    private _nonStopWords: string[] = [];
+    private _nonStopWordsDistincts: string[] = [];
+    constructor(wfapp: WordFrequencyFrameWork, dataStorage: DataStorage) {
+        dataStorage.registerForWordEvent(this.getWordsWithXLetter);
+        wfapp.registerForEndEvent(this.printWithZ);
+    }
+
+
+    private getWordsWithXLetter = (word: string) => {
+        if (word.includes('a')) {
+            this._nonStopWords.push(word);
+            if (!this._nonStopWordsDistincts.includes(word)) {
+                this._nonStopWordsDistincts.push(word);
+            }
+        }
+
+    }
+
+    private printWithZ = () => {
+        console.log(`${this._nonStopWords.length} word(s) has the letter a (in total),\n${this._nonStopWordsDistincts.length} word(s) has letter a (ditinct)`);
+    }
+
+}
+
 export function run() {
     let wfapp = new WordFrequencyFrameWork();
     let stopWordFilter = new StopWordFilter(wfapp);
     let dataStorage = new DataStorage(wfapp, stopWordFilter);
     let wordFrequencyCounter = new WordFrequencyCounter(wfapp, dataStorage);
+    let wordsWithA = new WordsWithACounter(wfapp, dataStorage);
     wfapp.run("fileToRead.txt");
 }
