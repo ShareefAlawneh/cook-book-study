@@ -52,6 +52,9 @@
 **chapter12:** the old way in js to declare classes, it allows us to clone the object to other one, its also provide us the mechanisim  to
                extend the object at run time, without touching the base implementation. and its apllying the self contained components concept,
                its a very good design pattern, where every thing is independant and you can use it by its own.
+
+**chapter13:** this is very common, in case we want the interface still the same with changing the implementation, the benifit will shine when 
+               tryng to something sharable, that other things depends on.              
                
               
               
