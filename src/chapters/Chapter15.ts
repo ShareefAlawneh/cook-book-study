@@ -100,6 +100,34 @@ class WordFrequencyCounter {
     }
 }
 
+class WordWithLetterCounter {
+    private _words: string[] = [];
+    private _wordsDistinct: string[] = [];
+    private _eventManager: EventManager;
+
+    constructor(eventManager: EventManager) {
+        this._eventManager = eventManager;
+        this._eventManager.subscribe('validWord', this.incrementCount);
+        this._eventManager.subscribe('print', this.printWords);
+    }
+
+    private incrementCount = (event) => {
+        if (event[1].includes('a')) {
+            this._words.push(event[1]);
+            if (!this._wordsDistinct.includes(event[1])) {
+                this._wordsDistinct.push(event[1]);
+            }
+        }
+    }
+
+    printWords = (event) => {
+        console.log(`${this._words.length} word(s) has the letter a (in total),\n${this._wordsDistinct.length} word(s) has letter a (ditinct)`);
+
+    }
+
+
+}
+
 class WordFrequencyApplication {
     private _eventManager: EventManager;
     constructor(eventManager: EventManager) {
@@ -125,5 +153,6 @@ export function run() {
     new StopWordsFilter(em);
     new WordFrequencyCounter(em);
     new WordFrequencyApplication(em);
+    new WordWithLetterCounter(em);
     em.publish(['run', 'fileToRead.txt']);
 }
