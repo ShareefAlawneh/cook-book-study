@@ -32,9 +32,10 @@ eval(`this.extractWords = ${extractWordsFunction}`);
 eval(`this.frequencies =   ${frequencyFunction}`);
 eval(`this.sort =   ${sortFunction}`);
 
+export const run = () => {
+    let wordFrequency = this["sort"](this["frequencies"](this["extractWords"](fileName)));
 
-let wordFrequency = this["sort"](this["frequencies"](this["extractWords"](fileName)));
-
-for (let wf of wordFrequency) {
-    console.log(wf[0], '-', wf[1]);
+    for (let wf of wordFrequency) {
+        console.log(wf[0], '-', wf[1]);
+    }
 }
