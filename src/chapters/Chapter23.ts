@@ -8,7 +8,7 @@ function acceptTypes(type) {
         descriptor.value = function () {
             for (let arg in arguments) {
                 if (typeof arguments[arg] != type) {
-                    throw Error(`Expecting Type ${type} but got ${typeof arg}`);
+                    throw Error(`${propertyKey} Expecting Type ${type} but got ${typeof arg}`);
                 }
             }
             return method.apply(this, arguments);
@@ -17,8 +17,23 @@ function acceptTypes(type) {
     }
 }
 
+function returnTypes(type) {
+    return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+        let method = descriptor.value;
+        descriptor.value = function () {
+            let retValue = method.apply(this, arguments);
+            if (typeof retValue != type) {
+                throw Error(`${propertyKey} Expecting return Type ${type} but returns ${typeof retValue}`);
+
+            }
+            return method.apply(this, arguments);
+        }
+        return descriptor;
+    }
+}
 
 class WordFrequencyController {
+    @returnTypes('object')
     @acceptTypes("string")
     extractWords(fileName) {
         let stopWords = fs.readFileSync(path.join(__dirname, `../utils/stop_words.txt`), 'utf-8').split(",");
@@ -30,6 +45,7 @@ class WordFrequencyController {
         return data.filter(word => !stopWords.includes(word));
     }
 
+    @returnTypes('object')
     @acceptTypes("object")
     frequencies(wordList) {
         let wordFreqs = {};
@@ -43,6 +59,7 @@ class WordFrequencyController {
         return wordFreqs;
     }
 
+    @returnTypes('object')
     @acceptTypes("object")
     sort(wordFreqs) {
         return [...Object.entries(wordFreqs).sort((a: any, b: any) => b[1] - a[1])];
