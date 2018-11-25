@@ -20,7 +20,8 @@
 // import { run } from './chapters/Chapter20';
 // import { run } from './chapters/Chapter21';
 // import { run } from './chapters/Chapter22';
-import { run } from './chapters/Chapter23';
+// import { run } from './chapters/Chapter23';
+import { run } from './chapters/Chapter24';
 
 
 
