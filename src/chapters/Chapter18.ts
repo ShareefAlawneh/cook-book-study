@@ -4,7 +4,9 @@ import * as path from 'path';
 
 class DecoratedProfile {
 
+
     @profile
+    @tracker
     extractWords(fileName: string) {
         let stopWords = fs.readFileSync(path.join(__dirname, `../utils/stop_words.txt`), 'utf-8').split(",");
         stopWords.push(...Array.from("abcdefghijklmnopqrstuvwxyz"));
@@ -14,7 +16,9 @@ class DecoratedProfile {
 
         return data.filter(word => !stopWords.includes(word));
     }
+
     @profile
+    @tracker
     frequencies(wordList) {
         let wordFreqs = {};
         for (let word of wordList) {
@@ -28,7 +32,9 @@ class DecoratedProfile {
     }
 
 
+
     @profile
+    @tracker
     sort(wordFreqs) {
         return [...Object.entries(wordFreqs).sort((a: any, b: any) => b[1] - a[1])];
     }
@@ -45,15 +51,23 @@ function profile(target: any, propertyKey: string, descriptor: PropertyDescripto
         let t1 = performance.now();
         let retValue = method.apply(this, arguments);
         let elapsed = performance.now() - t1;
-        console.log(`${target.name} took ${elapsed} seconds`);
+        console.log(`${propertyKey} took ${elapsed} seconds`);
         return retValue;
     }
     return descriptor;
 
 }
 
-
-
+function tracker(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    let method = descriptor.value;
+    descriptor.value = function () {
+        console.log(`Enter ${propertyKey}`);
+        let retValue = method.apply(this, arguments);
+        console.log(`Exit ${propertyKey}`);
+        return retValue;
+    }
+    return descriptor;
+}
 
 export function run() {
 
