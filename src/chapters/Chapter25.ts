@@ -30,33 +30,37 @@ function loadFileIntoDb(fileName, connection) {
         stmt.run(fileName);
         connection.get(`SELECT (id) FROM documents WHERE name = (?)`, [fileName], (err, rows) => {
             if (err) {
-                console.log(err);
+
                 docId = 0;
                 return;
             }
-            docId = rows[0];
+
+            docId = rows['id'];
+            connection.each(`SELECT MAX(id) as max FROM words`, function (error, rows) {
+                wordId = rows['max'];
+                if (wordId == undefined) {
+                    wordId = 0;
+                }
+
+                for (let word of words) {
+                    let stmt2 = connection.prepare(`INSERT INTO words VALUES(?,?,?)`);
+                    stmt2.run(wordId, docId, word);
+                    let charId = 0;
+                    for (let char of word) {
+                        let stmt3 = connection.prepare(`INSERT INTO chararcters VALUES(?,?,?)`);
+                        stmt3.run(charId, wordId, char);
+                        charId += 1;
+                    }
+                    wordId += 1;
+                }
+                printAll(connection);
+            });
         });
-        connection.each(`SELECT MAX(id) FROM words`, function (error, rows) {
-            wordId = rows[0];
-        });
 
-        if (wordId == null || wordId == 0) {
-            wordId = 0;
-        }
 
-        for (let word of words) {
-            let stmt2 = connection.prepare(`INSERT INTO words VALUES(?,?,?)`);
-            stmt2.run(wordId, docId, word);
-            let charId = 0;
-            for (let char of word) {
-                let stmt3 = connection.prepare(`INSERT INTO chararcters VALUES(?,?,?)`);
-                stmt3.run(charId, wordId, char);
-                charId += 1;
-            }
-            wordId += 1;
-        }
 
-    })
+    });
+
 }
 
 
@@ -64,7 +68,9 @@ export function run() {
     let connection = new sqlite3.Database(path.join(__dirname, '../tb.db3'));
     createDbSchema(connection);
     loadFileIntoDb('fileToRead.txt', connection);
+}
 
+function printAll(connection) {
     connection.serialize(function () {
         connection.all(`SELECT value, COUNT(*) AS c From words GROUP BY value ORDER BY c DESC`, [], function (err, rows) {
             for (let row of rows) {
@@ -74,4 +80,3 @@ export function run() {
 
     });
 }
-
