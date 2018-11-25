@@ -2,7 +2,30 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as assert from 'assert';
 
+class THEErrorHandler {
 
+
+    private _value;
+    constructor(v) {
+        this._value = v;
+    }
+
+    bind(this, callback) {
+        try {
+
+            this._value = callback(this._value);
+        } catch (Error) {
+            console.log('Something Went wrong', Error);
+            process.exit();
+        }
+        return this;
+    }
+
+    printMe() {
+        console.log(this._value);
+    }
+
+}
 function extractWords(fileName) {
 
     assert(typeof fileName == 'string', 'I Need String As File Path, I Quit');
@@ -38,27 +61,26 @@ function frequencies(wordsList) {
 function sort(wordFreqs) {
     assert(typeof wordFreqs == 'object', 'I Need Object, I Quit');
     assert(wordFreqs != {}, 'I Need Non-Empty Object, I Quit');
-    assert(false, 'JUST FOR TESTING :D')
+    // assert(false, 'JUST FOR TESTING :D')
     return [...Object.entries(wordFreqs).sort((a: any, b: any) => b[1] - a[1])];
 
 }
 
-
+function top25Words(wordFreqs: []) {
+    let top25 = "";
+    for (let wf of wordFreqs) {
+        top25 += `${wf[0]} - ${wf[1]}\n`
+    }
+    return top25;
+}
 
 export function run() {
     let fileName = 'fileToRead.txt';
-    try {
-        let wordFreqs = sort(frequencies(removeStopWords(extractWords(fileName))));
-        assert(wordFreqs instanceof Array, 'THIS IS NOT A LIST !!!!');
-        // this will cause the fail on the whole program
-        assert(wordFreqs.length > 25, 'LESS THATN 25 :(');
-        for (let [w, f] of wordFreqs.slice(0, 25)) {
-            console.log(w, '-', f);
-        }
-
-    } catch (Error) {
-
-        console.log('Something Went wrong', Error);
-
-    }
+    new THEErrorHandler(fileName)
+        .bind(extractWords)
+        .bind(removeStopWords)
+        .bind(frequencies)
+        .bind(sort)
+        .bind(top25Words)
+        .printMe();
 }
