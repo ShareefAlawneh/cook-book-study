@@ -22,7 +22,8 @@
 // import { run } from './chapters/Chapter22';
 // import { run } from './chapters/Chapter23';
 // import { run } from './chapters/Chapter24';
-import { run } from './chapters/Chapter25';
+// import { run } from './chapters/Chapter25';
+import { run } from './chapters/Chapter26';
 
 
 
