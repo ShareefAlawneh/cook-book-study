@@ -3,39 +3,17 @@ import * as path from 'path';
 
 
 function* charachters(fileName: string) {
-    for (let line of fs.readFileSync(path.join(__dirname, `../utils/${fileName}`), 'utf-8').split('\n')) {
-        line += ' ';
-        for (let c of line) {
-            yield c;
-        }
+    for (let line of fs.readFileSync(path.join(__dirname, `../utils/${fileName}`), 'utf-8').split('\r\n')) {
+        yield line;
     }
 }
 
 function* allWords(fileName: string) {
     let startChar = true;
     let word = "";
-    for (let c of charachters(fileName)) {
-
-
-        if (startChar == true) {
-
-            if (c.match('[a-z0-9]')) {
-                word = c.toLowerCase();
-                startChar = false;
-            }
-            else {
-
-            }
-        }
-        else {
-            if (c.match('[a-z0-9]')) {
-                word += c.toLowerCase();
-            } else {
-                startChar = true;
-                yield word;
-
-            }
-        }
+    for (let line of charachters(fileName)) {
+        for (let word of line.replace(new RegExp('[^a-zA-Z0-9]+'), ' ').toLowerCase().split(/[\s,]+/))
+            yield word;
     }
 }
 
