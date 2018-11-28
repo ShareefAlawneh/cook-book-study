@@ -24,7 +24,13 @@
 // import { run } from './chapters/Chapter24';
 // import { run } from './chapters/Chapter25';
 // import { run } from './chapters/Chapter26';
-import { run } from './chapters/Chapter27';
+// import { run } from './chapters/Chapter27';
+import { run } from './chapters/Chapter28';
+// import { run } from './chapters/Chapter29';
+// import { run } from './chapters/Chapter30';
+// import { run } from './chapters/Chapter31';
+// import { run } from './chapters/Chapter32';
+
 
 
 
@@ -34,7 +40,22 @@ import { run } from './chapters/Chapter27';
 
 run();
 // let wfc = new WordFrequencyController();
-// wfc.run();
 // wfc.dispatch(['init', 'fileToRead.txt']);
+// // wfc.dispatch(['init', 'fileToRead.txt']);
 // wfc.dispatch(['run']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
