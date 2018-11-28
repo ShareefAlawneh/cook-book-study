@@ -55,8 +55,100 @@
 
 **chapter13:** this is very common, in case we want the interface still the same with changing the implementation, the benifit will shine when 
                tryng to something sharable, that other things depends on. which somehow applies the open-close concept.               
+
+**chapter14:** i imagin we have a master that holds the framework, with other slave nodes, any slave has to push its event
+               to the master so he can handle it, but at some points the slaves can borrow from each others by pushing 
+               certain events (like internal proccess) to each others, that proccesses will make overhead to the master,
+               the master is a general interface that others can connect to, so we can add more nodes to the system 
+               without breaking the ring.
+
+**chapter15:** same to the built in event emmiters in modern javascript, a component will emit an event with some data,
+               and other components can listen for that event to handle it, also they can un listen for  events 
+               totlay or at some points, i think we can use this to share data between devices around the network,
+               theres a technology called pub-nub that do the same technique, suppose we have 3 point of sales 
+               for the same market, when a user adds a new product to one point of sale, it publishes a product 
+               created event with its data, the others listening for that event and they will take the data and save it.
+
+**chapter16:** nothing new in this chapter, but the data that came from out-side should be readonly and the function can                   take advantage of its meta data.
+
+**chapter17:** this is good when you aim to do something dynamic, like you are handling a service for a mobile company,
+                you know alot of services could be added, like changing sim card, dis-connect a member, re-connect a member,
+                and informative services like what is my charge, i want to buy an 3G package, and alot alot alot of functionallity, you dont need your system to be large, all you need is a dict keyed with the services names,
+                and its value will be the functionallity, when user send a request to the system you will execute that functionallity immediately and un link it agin from the system until other request came, this also will make your program open for extending and cloesd form modification.
+
+**chapter18:** we add a side functionallity without affect the main implementation of the abstractions, in the example, we                 add a performance test to the application, then we add a program tracker, that will till us which proccess                  is runing now, without aspects, we need to go through each function and add a lines of codes, to do that,
+               we may harm the main implementation since it may be implemented bu other programmers, doing these side 
+               processes in isolated way, will keep the things run as expected.
+
+**chapter19:** we doing this every day, every time we write a code we are using a plugins, something that did not came with 
+               the language / framework that we did not implement, and we really do not know who implemented it.
+               it will make the life easier, it may not be useful if we need the program in higher effecinecy, 
+               but at least it will saves our time and work.
+
+**chapter20:** we always fear from nulls, and we always checks if the value is null or not, and we may use try catch for
+               doing something reasonable in case of failer, this is very important in any code, in the chapter, 
+               he settle for checking if the pile path is provided or not, but i think he has to check if the filename 
+               is of type string or not (just kidding), todays compilers is smart enough to check the most things that 
+               may cause errors at compilation time, so we only need to check the run time possible "nulls".
+
+**chapter21:** same as previous one, but will add a large try catch to go aside with try catch(es) in each function
+               i think its internationally prohibited to do that, because the try catch is very cost. also it will 
+               compromise the exception after catch it so it can be A lesson for those who consider :P
+
+**chapter22:** the same as previous, but with main and most important one diff, is the try catch 
+               used on the higher level of the call stack, which is the right way to do it (unless for me).
+               unlike chapter 20, chapter 21 + 22 will stop the program without returning any reasonable value
+               to the user, just a repulsive message that tills him he was worng (And We Love Doing That :D).
+
+**chapter23:** the most confused, the most ugly and lovely thing you may face in the journey of learning programming
+               is the decorator function, the first time i saw this thing, i thought i lost my mind, a function, that accepts a function and defining an internal function to return a function to the function.
+               its a kind of middleware that protect your procedures from external attacks, the beast example is a divide 
+               function, that fear from accepting zero all the time, the decorator will protect him from this attack 
+               and will return a beatiful message to the user (or my the caller function) without exiting the program 
+               or crashing it.
+
+**chapter24:** in this style, we tried to turn the all the functions to be idempotent functions, without a side effects,
+               so all the time the function will give us the same output for the same input, the writer make it fake by 
+               returning an internal function instead of value so you will got the same output every time, the side effects may be caused by externals like I/O so we need to avoid calling them from functions directly.
+
+**chapter25:** it was the most booring chapter, we uses databases all the time to store data, now it is something 
+               normal, not that big deal.
+
+**chapter26:** this is usefull when we aim to update our data, when something changed in the application, flag, a fileName,                we actually do this, we update a values on related to other values, like when the user typed his name,
+               we update the information in the array to be for that user, other user typed his name, a new data will be loaded.
+
+**chapter27:** using generators is the best choice when we do not want to save in-memory data, also it has a less size
+               than array or list, and it will redirect the data as real time forwarding. 
+               that does not mean its the best, while we cannot call an item by its index or we can not loop through 
+               the generator agin, but in arrays we can do nested loops.
+
+**chapter28:** javascript is a single threaded language, yes its asynchronous, but all that done on the same thread.
+               i fake the thread part in python by using async and await with setTimeout to make it feel like thread.
+               anyway, this topic is a hot topic in computer sience, software/hardware companies spends alot of time to handle the multi-task/multi-threaded archetechture and programs, we can write a code, listing to music and 
+               searching stackoverflow :P at the same time, we can move the window of the program while its proccessing 
+               things at the same time, all that is threads and concurrent actions.
+
+**chapter29:** its somehow close to chapter26, but here we have a space of data when one function write to it, others will                 update there states concurrently and not sequentially.
+
+**chapter30 && chapter31:** i think this approuch is good when we talk about data mining, or AI system nodes, 
+                            mapping the data blocks to functions to get another block of data (results) and 
+                            keep doing this untile we have the most improved block of results.
+
+**chapter32:** Note: in the chapter, the author used the model directly in view, which is not supposed to be,
+                     its fine and we call this delegation in mvc terms, but the view should contact to the controller
+                     only.
+
+                most of frameworks uses this style, its doing so good in the large application, but it will be an 
+                overhead  in the small ones.
+
+**chpter33:** we finally reach this chapter, i am a web developer, and i love the word 'REST', the web uses this style 
+              very very much, the user interactive with the ui, the ui will respond by a data came from api, 
+              or poping up a modal, every thing is caused by user interactions, its the most logical and intrested 
+              style at all.      
+                                            
+
+
                
-              
               
  
  # chapter1 exc
